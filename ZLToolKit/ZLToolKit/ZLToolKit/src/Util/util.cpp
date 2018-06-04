@@ -258,6 +258,45 @@ int gettimeofday(struct timeval *tp, void *tzp) {
 	tp->tv_usec = wtm.wMilliseconds * 1000;
 	return (0);
 }
+    
+    
+void SpliteSring(const std::string& src, const std::string& split, std::vector<std::string>& results)
+{
+    std::string tSrc = src;
+    while (tSrc.length() > 0)
+    {
+        int pos = tSrc.find(split.c_str());
+        if (pos != std::string::npos)
+        {
+            std::string str = tSrc.substr(0, pos);
+            results.push_back(str);
+            
+            tSrc = tSrc.substr(pos + split.size(), tSrc.length() - pos - split.size());
+        }
+        else
+        {
+            if (!tSrc.empty())
+                results.push_back(tSrc);
+            
+            break;
+        }
+    }
+}
+    
+std::string Format(const char* format, ...)
+{
+    char szBuf[8192];
+    va_list arglist;
+    va_start(arglist, format);
+#ifdef _WIN32
+    vsprintf_s(szBuf, format, arglist);
+#else
+    vsprintf(szBuf, format, arglist);
+#endif
+    va_end(arglist);
+    
+    return szBuf;
+}
 
 #endif //WIN32
 
