@@ -23,7 +23,6 @@
  */
 #include <iostream>
 #include "test_logger.hpp"
-#include "test_noticeCenter.hpp"
 #include "test_rwmutex.hpp"
 //#include "test_semaphore.hpp"
 //#include "test_threadPool.hpp"
@@ -31,14 +30,16 @@
 #include "tests/test_tcpClient.hpp"
 #include "test_tcpEchoServer.hpp"
 //#include "test_SignalSlot.hpp"
+#include "test_noticeCenter.hpp"
 
 int main() {
+    test_notice();
     //test_SignalSlotOne();
     //test_noticeCenter();
     //test_logger();
     //test_tcpClient();
     //test_udpSock();
-    test_tcpEchoServer();
+    //test_tcpEchoServer();
     //test_semaphore();
     //test_rwmutex();
     return 0;

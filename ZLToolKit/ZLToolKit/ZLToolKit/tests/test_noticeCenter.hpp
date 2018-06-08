@@ -1,56 +1,36 @@
-﻿/*
- * MIT License
- *
- * Copyright (c) 2016 xiongziliang <771730766@qq.com>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-#include <signal.h>
-#include "Util/util.h"
-#include "Util/logger.h"
-#include "Util/NoticeCenter.h"
-using namespace std;
-using namespace ZL::Util;
+//
+//  main.cpp
+//  SignalSlot
+//
+//  Created by Haitao on 10/2/18.
+//  Copyright © 2018年 mess. All rights reserved.
+//
+
+#include <iostream>
+#include "NoticeCenter.h"
+
 
 using namespace std::placeholders;
 
-//广播名称1
-#define NOTICE_NAME1 "NOTICE_NAME1"
-//广播名称2
-#define NOTICE_NAME2 "NOTICE_NAME2"
 
-#define NOTICE_NAME3 "NOTICE_NAME3"
-
-#define NOTICE_NAME4 "NOTICE_NAME4"
-
-//程序退出标记
-bool g_bExitFlag = false;
-
-class MFun
+class String
 {
 public:
-     static void soneString(const string& str)
+    String(const char* str)
     {
-         printf("MFun::soneString :%s\n",str.c_str());
+        printf("String ctor this %p\n", this);
+    }
+    
+    String(const String& rhs)
+    {
+        printf("String copy ctor this %p, rhs %p\n", this, &rhs);
+    }
+    
+    String(String&& rhs)
+    {
+        printf("String move ctor this %p, rhs %p\n", this, &rhs);
     }
 };
-
 
 class Foo
 {
@@ -60,12 +40,23 @@ public:
     void one(int);
     void oner(int&);
     void onec(int) const;
-    void oneString(const string& str);
+    void oneString(const String& str);
+    void Notify(const std::unordered_map<std::string,std::string> &dic);
+    void Notify2(const std::unordered_map<std::string,std::string> &dic)
+    {
+        std::cout << "Notify2:" << dic.at("hello") << std::endl;
+    }
+    
     // void oneStringRR(String&& str);
     static void szero();
     static void sone(int);
-    static void soneString(const string& str);
+    static void soneString(const String& str);
 };
+
+void Foo::Notify(const std::unordered_map<std::string,std::string> &dic)
+{
+    std::cout << "Notify:" << dic.at("hello") << std::endl;
+}
 
 void Foo::zero()
 {
@@ -97,55 +88,25 @@ void Foo::sone(int x)
     printf("Foo::sone() x=%d\n", x);
 }
 
-void Foo::oneString(const string& str)
+void Foo::oneString(const String& str)
 {
     printf("Foo::oneString\n");
 }
 
-void Foo::soneString(const string& str)
+void Foo::soneString(const String& str)
 {
-    printf("Foo::soneString :%s\n",str.c_str());
+    printf("Foo::soneString\n");
 }
 
-
-int test_noticeCenter() {
-	//设置程序退出信号处理函数
-	signal(SIGINT, [](int){g_bExitFlag = true;});
-	//设置日志
-	Logger::Instance().add(std::make_shared<ConsoleChannel>("stdout", LTrace));
-
-	//对事件NOTICE_NAME1新增一个监听
-	//addListener方法第一个参数是标签，用来删除监听时使用
-	//需要注意的是监听回调的参数列表个数类型需要与emitEvent广播时的完全一致，否则会有无法预知的错误
-	NoticeCenter::Instance().addListener(0,NOTICE_NAME1,
-			[](int a,const char *b,double c,string &d){
-		DebugL << a << " " << b << " " << c << " " << d;
-	});
+int test_notice()
+{
+    std::cout << "Hello, World!\n";
+    Foo f;
+    NoticeCenter::Instance().AddObserver("hello", std::bind(&Foo::Notify, &f, _1));
+    NoticeCenter::Instance().AddObserver("hello", std::bind(&Foo::Notify2, &f, _1));
+    std::unordered_map<std::string, std::string> info;
+    info["hello"] = "world";
+    NoticeCenter::Instance().PostNotificationName("hello", info);
     
-    NoticeCenter::Instance().addListener(0,NOTICE_NAME3,&Foo::sone);
-    NoticeCenter::Instance().addListener(0,NOTICE_NAME4,&Foo::soneString);
-    NoticeCenter::Instance().addListener(0,NOTICE_NAME4,&MFun::soneString);
-//    Foo f;
-//    NoticeCenter::Instance().addListener(0,NOTICE_NAME3,std::bind(&Foo::onec, &f, _1));
-    
-	//监听NOTICE_NAME2事件
-	NoticeCenter::Instance().addListener(0,NOTICE_NAME2,
-			[](string &d,double c,const char *b,int a){
-		DebugL << a << " " << b << " " << c << " " << d;
-	});
-	int a = 0;
-	while(!g_bExitFlag){
-		const char *b = "b";
-		double c = 3.14;
-		string d("d");
-		//每隔1秒广播一次事件，如果无法确定参数类型，可加强制转换
-		NoticeCenter::Instance().emitEvent(NOTICE_NAME1,++a,(const char *)"b",c,d);
-		NoticeCenter::Instance().emitEvent(NOTICE_NAME2,d,c,b,a);
-        NoticeCenter::Instance().emitEvent(NOTICE_NAME3,20);
-        NoticeCenter::Instance().emitEvent(NOTICE_NAME4,"hhhh");
-		sleep(1); // sleep 1 second
-        //printf("remove MFun::soneString");
-	}
-	Logger::Destory();
-	return 0;
+    return 0;
 }

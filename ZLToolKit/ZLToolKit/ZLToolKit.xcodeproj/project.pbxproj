@@ -11,7 +11,7 @@
 		B2B8B4522080547500D5B7C7 /* test_asyncTaskThrad.hpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B8B43F2080547500D5B7C7 /* test_asyncTaskThrad.hpp */; };
 		B2B8B4532080547500D5B7C7 /* test_eventPoller.hpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B8B4402080547500D5B7C7 /* test_eventPoller.hpp */; };
 		B2B8B4542080547500D5B7C7 /* test_logger.hpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B8B4412080547500D5B7C7 /* test_logger.hpp */; };
-		B2B8B4552080547500D5B7C7 /* test_noticeCenter.hpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B8B4422080547500D5B7C7 /* test_noticeCenter.hpp */; };
+		B2B8B4552080547500D5B7C7 /* test_noticeCenter-old.hpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B8B4422080547500D5B7C7 /* test_noticeCenter-old.hpp */; };
 		B2B8B4562080547500D5B7C7 /* test_pipe.hpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B8B4432080547500D5B7C7 /* test_pipe.hpp */; };
 		B2B8B4572080547500D5B7C7 /* test_resourcePool.hpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B8B4442080547500D5B7C7 /* test_resourcePool.hpp */; };
 		B2B8B4582080547500D5B7C7 /* test_ringBuffer.hpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B8B4452080547500D5B7C7 /* test_ringBuffer.hpp */; };
@@ -59,10 +59,12 @@
 		B290C2C120C0E3F60078A2D7 /* onceToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = onceToken.h; sourceTree = "<group>"; };
 		B290C2F220C129B10078A2D7 /* SignalSlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalSlot.h; sourceTree = "<group>"; };
 		B290C2F320C129D50078A2D7 /* test_SignalSlot.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = test_SignalSlot.hpp; sourceTree = "<group>"; };
+		B2B4104A20CA2A19005496BB /* NoticeCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeCenter.h; sourceTree = "<group>"; };
+		B2B4104B20CA2A64005496BB /* test_noticeCenter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = test_noticeCenter.hpp; sourceTree = "<group>"; };
 		B2B8B43F2080547500D5B7C7 /* test_asyncTaskThrad.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = test_asyncTaskThrad.hpp; sourceTree = "<group>"; };
 		B2B8B4402080547500D5B7C7 /* test_eventPoller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = test_eventPoller.hpp; sourceTree = "<group>"; };
 		B2B8B4412080547500D5B7C7 /* test_logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = test_logger.hpp; sourceTree = "<group>"; };
-		B2B8B4422080547500D5B7C7 /* test_noticeCenter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = test_noticeCenter.hpp; sourceTree = "<group>"; };
+		B2B8B4422080547500D5B7C7 /* test_noticeCenter-old.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "test_noticeCenter-old.hpp"; sourceTree = "<group>"; };
 		B2B8B4432080547500D5B7C7 /* test_pipe.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = test_pipe.hpp; sourceTree = "<group>"; };
 		B2B8B4442080547500D5B7C7 /* test_resourcePool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = test_resourcePool.hpp; sourceTree = "<group>"; };
 		B2B8B4452080547500D5B7C7 /* test_ringBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = test_ringBuffer.hpp; sourceTree = "<group>"; };
@@ -112,7 +114,7 @@
 		B2B8B48F208055A300D5B7C7 /* MD5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MD5.cpp; sourceTree = "<group>"; };
 		B2B8B490208055A300D5B7C7 /* MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MD5.h; sourceTree = "<group>"; };
 		B2B8B491208055A300D5B7C7 /* mini.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mini.h; sourceTree = "<group>"; };
-		B2B8B492208055A300D5B7C7 /* NoticeCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeCenter.h; sourceTree = "<group>"; };
+		B2B8B492208055A300D5B7C7 /* NoticeCenter-old.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NoticeCenter-old.h"; sourceTree = "<group>"; };
 		B2B8B494208055A300D5B7C7 /* ResourcePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResourcePool.h; sourceTree = "<group>"; };
 		B2B8B495208055A300D5B7C7 /* RingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
 		B2B8B49A208055A300D5B7C7 /* TimeTicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeTicker.h; sourceTree = "<group>"; };
@@ -163,10 +165,11 @@
 		B2B8B43E2080547500D5B7C7 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				B2B4104B20CA2A64005496BB /* test_noticeCenter.hpp */,
 				B2B8B43F2080547500D5B7C7 /* test_asyncTaskThrad.hpp */,
 				B2B8B4402080547500D5B7C7 /* test_eventPoller.hpp */,
 				B2B8B4412080547500D5B7C7 /* test_logger.hpp */,
-				B2B8B4422080547500D5B7C7 /* test_noticeCenter.hpp */,
+				B2B8B4422080547500D5B7C7 /* test_noticeCenter-old.hpp */,
 				B2B8B4432080547500D5B7C7 /* test_pipe.hpp */,
 				B2B8B4442080547500D5B7C7 /* test_resourcePool.hpp */,
 				B2B8B4452080547500D5B7C7 /* test_ringBuffer.hpp */,
@@ -248,6 +251,7 @@
 		B2B8B488208055A300D5B7C7 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				B2B4104A20CA2A19005496BB /* NoticeCenter.h */,
 				B290C2F220C129B10078A2D7 /* SignalSlot.h */,
 				B290C2C120C0E3F60078A2D7 /* onceToken.h */,
 				B2B8B48B208055A300D5B7C7 /* File.cpp */,
@@ -257,7 +261,7 @@
 				B2B8B48F208055A300D5B7C7 /* MD5.cpp */,
 				B2B8B490208055A300D5B7C7 /* MD5.h */,
 				B2B8B491208055A300D5B7C7 /* mini.h */,
-				B2B8B492208055A300D5B7C7 /* NoticeCenter.h */,
+				B2B8B492208055A300D5B7C7 /* NoticeCenter-old.h */,
 				B2B8B494208055A300D5B7C7 /* ResourcePool.h */,
 				B2B8B495208055A300D5B7C7 /* RingBuffer.h */,
 				B2B8B49A208055A300D5B7C7 /* TimeTicker.h */,
@@ -337,7 +341,7 @@
 				B2B8B4A8208055A300D5B7C7 /* EventPoller.cpp in Sources */,
 				B2B8B4632080547500D5B7C7 /* test_udpSock.hpp in Sources */,
 				B2B8B4562080547500D5B7C7 /* test_pipe.hpp in Sources */,
-				B2B8B4552080547500D5B7C7 /* test_noticeCenter.hpp in Sources */,
+				B2B8B4552080547500D5B7C7 /* test_noticeCenter-old.hpp in Sources */,
 				B2B8B4AA208055A300D5B7C7 /* PipeWrap.cpp in Sources */,
 				B2B8B4B2208055A300D5B7C7 /* MD5.cpp in Sources */,
 				B2B8B4AD208055A300D5B7C7 /* README.md in Sources */,

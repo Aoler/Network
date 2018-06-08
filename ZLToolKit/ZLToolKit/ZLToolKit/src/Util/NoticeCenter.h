@@ -1,121 +1,89 @@
-﻿/*
- * MIT License
- *
- * Copyright (c) 2016 xiongziliang <771730766@qq.com>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+//
+//  Notice.h
+//  SignalSlot
+//
+//  Created by Haitao on 1/6/18.
+//  Copyright © 2018年 mess. All rights reserved.
+//
 
-#ifndef SRC_UTIL_NOTICECENTER_H_
-#define SRC_UTIL_NOTICECENTER_H_
-
+#ifndef Notice_h
+#define Notice_h
+#include <unordered_map>
+#include <list>
 #include <mutex>
 #include <memory>
 #include <string>
-#include <exception>
-#include <functional>
-#include <unordered_map>
-#include "function_traits.h"
 
-using namespace std;
+template<typename Signature>
+class SignalTrivial;
 
-namespace ZL {
-namespace Util {
+template <typename RET, typename... ARGS>
+class SignalTrivial<RET(ARGS...)>
+{
+public:
+    typedef std::function<void (ARGS...)> Functor;
+    
+    void connect(Functor &func)
+    {
+        functors_.push_back(func);
+    }
+    
+    void call(ARGS&... args)
+    {
+        typename std::vector<Functor>::iterator it = functors_.begin();
+        for (; it != functors_.end(); ++it)
+        {
+            (*it)(args...);
+        }
+    }
+private:
+    std::vector<Functor> functors_;
+};
 
 
 class NoticeCenter {
 public:
-	class InterruptException : public std::runtime_error
-	{
-	public:
-		InterruptException():std::runtime_error("InterruptException"){}
-		virtual ~InterruptException(){}
-	};
-
-	virtual ~NoticeCenter(){}
-	static NoticeCenter &Instance(){
-		static NoticeCenter instance;
-		return instance;
-	}
-	template<typename ...ArgsType>
-	bool emitEvent(const char *strEvent,ArgsType &&...args){
-		lock_guard<recursive_mutex> lck(_mtxListener);
-		auto it0 = _mapListener.find(strEvent);
-		if (it0 == _mapListener.end()) {
-			return false;
-		}
-		for(auto &pr : it0->second){
-			typedef function<void(ArgsType &&...)> funType;
-			funType *obj = (funType *)(pr.second.get());
-			try{
-				(*obj)(std::forward<ArgsType>(args)...);
-			}catch(InterruptException &ex){
-				break;
-			}
-		}
-		return it0->second.size();
-	}
-
-
-	template<typename FUN>
-	void addListener(void *tag, const char *strEvent, const FUN &fun) {
-		typedef typename function_traits<FUN>::stl_function_type funType;
-		std::shared_ptr<void> pListener(new funType(fun), [](void *ptr) {
-			funType *obj = (funType *)ptr;
-			delete obj;
-		});
-		lock_guard<recursive_mutex> lck(_mtxListener);
-		_mapListener[strEvent].emplace(tag,pListener);
-	}
-
-
-	void delListener(void *tag,const char *strEvent){
-		lock_guard<recursive_mutex> lck(_mtxListener);
-		auto it = _mapListener.find(strEvent);
-		if(it == _mapListener.end()){
-			return;
-		}
-		it->second.erase(tag);
-		if(it->second.empty()){
-			_mapListener.erase(it);
-		}
-	}
-	void delListener(void *tag){
-		lock_guard<recursive_mutex> lck(_mtxListener);
-		for(auto it = _mapListener.begin();it != _mapListener.end();){
-			it->second.erase(tag);
-			if(it->second.empty()){
-				it = _mapListener.erase(it);
-				continue;
-			}
-			++it;
-		}
-	}
-
+    typedef std::function<void (const std::unordered_map<std::string,std::string>)> Functor;
+    typedef SignalTrivial<void(const std::unordered_map<std::string,std::string>)> Signal;
+    
+    virtual ~NoticeCenter(){}
+    static NoticeCenter &Instance()
+    {
+        static NoticeCenter *instance(new NoticeCenter);
+        return *instance;
+    }
+    
+    static void Destroy()
+    {
+        delete &NoticeCenter::Instance();
+    }
+    
+    void AddObserver(const std::string &key,  Functor fun)
+    {
+        std:std::lock_guard<std::recursive_mutex> lck(mtxObserver);
+        if (mapObserver.find(key) != mapObserver.end())
+        {
+            mapObserver[key]->connect(fun);
+        } else
+        {
+            std::shared_ptr<Signal> signal(new Signal);
+            signal->connect(fun);
+            mapObserver[key] = signal;
+        }
+        
+    }
+    
+    void PostNotificationName(const std::string &key,  std::unordered_map<std::string,std::string> &info)
+    {
+        std::shared_ptr<Signal> signal = mapObserver[key];
+        signal->call(info);
+    }
+    
 private:
-	NoticeCenter(){}
-	recursive_mutex _mtxListener;
-	unordered_map<string,unordered_multimap<void *,std::shared_ptr<void> > > _mapListener;
+    std::recursive_mutex mtxObserver;
+    std::unordered_map<std::string,std::shared_ptr<Signal>> mapObserver;
+    
 
 };
 
-} /* namespace Util */
-} /* namespace ZL */
-
-#endif /* SRC_UTIL_NOTICECENTER_H_ */
+#endif /* Notice_h */
